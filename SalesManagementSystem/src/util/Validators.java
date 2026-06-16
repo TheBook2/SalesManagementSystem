@@ -3,7 +3,7 @@ package util;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import model.customer.Customer;
+import model.Customer;
 import service.CustomerManagement;
 
 public class Validators {

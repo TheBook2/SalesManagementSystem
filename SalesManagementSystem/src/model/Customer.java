@@ -1,4 +1,4 @@
-package model.customer;
+package model;
 
 /*
 Các quy tắc đặt tên: 
@@ -13,39 +13,40 @@ Method:
 */
 
 public class Customer {
-    private int idCustomer; 
+    private String idCustomer; 
     private String nameCustomer;
     private String phoneCustomer;
     private String addressCustomer;
-    private String customerType = "Regular";
+    private String customerType;
     
     // Constructor
     public Customer() {
+        this.idCustomer = "";
+        this.nameCustomer = "";
+        this.phoneCustomer = "";
+        this.addressCustomer = "";
+        this.customerType = "Regular";
     }
 
     // Constructor with parameters
-    public Customer(int idCustomer, String nameCustomer, String phoneCustomer, String addressCustomer) {
-        this.idCustomer = idCustomer;           
+    public Customer(String idCustomer, String nameCustomer, String phoneCustomer, String addressCustomer) {
+        this.idCustomer = idCustomer;
         this.nameCustomer = nameCustomer;
         this.phoneCustomer = phoneCustomer;
         this.addressCustomer = addressCustomer;
     }
 
-    public Customer(String nameCustomer, String phoneCustomer, String addressCustomer) {
-        this.nameCustomer = nameCustomer;
-        this.phoneCustomer = phoneCustomer;
-        this.addressCustomer = addressCustomer;
-    }
+    
 
     // =====================================================================================================
     // Vung setter & getter cua cac fields
 
     // ID
-    public int getIdCustomer() {
+    public String getIdCustomer() {
         return idCustomer;
     }
 
-    public void setIdCustomer(int idCustomer) {
+    public void setIdCustomer(String idCustomer) {
         this.idCustomer = idCustomer;
     }
 

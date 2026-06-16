@@ -1,7 +1,8 @@
 package service;
 
 import java.util.Scanner;
-import model.customer.Customer;
+
+import model.Customer;
 
 public class CustomerManagement {
     private Customer[] customers = new Customer[100];
@@ -203,5 +204,6 @@ public class CustomerManagement {
     public Customer[] getCustomers() {
         return customers;
     }
+    
     
 }

@@ -2,7 +2,7 @@ package view;
 
 import java.util.Scanner;
 
-import model.customer.Customer;
+import model.Customer;
 import service.CustomerManagement;
 import service.ProductManagement;
 import util.Validators;

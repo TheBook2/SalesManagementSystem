@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Scanner;
+
 /*
 Các quy tắc đặt tên:
 Fields: 
@@ -15,7 +17,7 @@ Method:
 public class Product {
     private int idProduct;
     private String nameProduct;
-    private String categoryProduct; 
+    private String categoryProduct;
     private double price;
     private int stockQuantity;
 
@@ -27,15 +29,35 @@ public class Product {
         this.idProduct = idProduct;
         this.nameProduct = nameProduct;
         this.categoryProduct = categoryProduct;
-        this.price = price;
-        this.stockQuantity = stockQuantity;
+        setPrice(price);
+        setStockQuantity(stockQuantity);
     }
 
-    public void UpdateStockProduct(int quantity) {
+    public void updateStockProduct(int quantity) {
+        if (this.stockQuantity + quantity < 0) {
+            System.out.println("Error: Stock quantity cannot be negative!");
+            return;
+        }
         this.stockQuantity += quantity;
     }
 
-    // ===================================================================================================== 
+    public void UpdateProduct(int idProduct, String nameProduct, String categoryProduct, double price,
+            int stockQuantity) {
+        this.idProduct = idProduct;
+        this.nameProduct = nameProduct;
+        this.categoryProduct = categoryProduct;
+        setPrice(price);
+        setStockQuantity(stockQuantity);
+    }
+
+    public void viewAllProduct() {
+        System.out.println("ID: " + idProduct);
+        System.out.println("Name: " + nameProduct);
+        System.out.println("Category: " + categoryProduct);
+        System.out.println("Price: " + price);
+        System.out.println("Stock: " + stockQuantity);
+    }
+    // =====================================================================================================
     // Vung setter & getter cua cac fields
 
     // ID
@@ -46,7 +68,7 @@ public class Product {
     public void setIdProduct(int idProduct) {
         this.idProduct = idProduct;
     }
-    
+
     // Name
     public String getNameProduct() {
         return nameProduct;
@@ -71,17 +93,45 @@ public class Product {
     }
 
     public void setPrice(double price) {
-        this.price = price;            // thêm điều kiện price ko đc âm
+        if (price < 0) {
+            System.out.println("Price cannot be negative!");
+            return;
+        }
+
+        this.price = price; // thêm điều kiện price ko đc âm
     }
 
     // Stock Quantity
     public int getStockQuantity() {
-        return stockQuantity;         
+        return stockQuantity;
     }
 
     public void setStockQuantity(int stockQuantity) {
-        this.stockQuantity = stockQuantity;     // thêm điều kiện stock quantity ko đc âm
-    } 
-    
-}
+        if (stockQuantity < 0) {
+            System.out.println("Stock quantity cannot be negative!");
+            return;
+        }
+        this.stockQuantity = stockQuantity; // thêm điều kiện stock quantity ko đc âm
+    }
 
+    public void addNewProduct() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("ID: ");
+        idProduct = sc.nextInt();
+        sc.nextLine(); // bỏ dognf thừa
+
+        System.out.println("Name: ");
+        nameProduct = sc.nextLine();
+
+        System.out.println("Category; ");
+        categoryProduct = sc.nextLine();
+
+        System.out.println("Price: ");
+        price = sc.nextDouble();
+
+        System.out.print("Stock Quantity: ");
+        stockQuantity = sc.nextInt();
+        sc.nextLine();
+    }
+
+}

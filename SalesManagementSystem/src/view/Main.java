@@ -47,10 +47,10 @@ public class Main {
                         System.out.println("======================================");
                         System.out.format("%27s", "Inventory Management\n");
                         System.out.println("======================================");
-                        System.out.println("   1. Add New Customer");
-                        System.out.println("   2. Update Customer Information");
-                        System.out.println("   3. Remove Customer");
-                        System.out.println("   4. View All Customer");
+                        System.out.println("   1. Add New Product");
+                        System.out.println("   2. Update Product");
+                        System.out.println("   3. Remove Product");
+                        System.out.println("   4. View All Product");
                         System.out.println("   0. Back");
                         System.out.printf("Enter your choice> ");
                         productChoice = sc.nextInt();

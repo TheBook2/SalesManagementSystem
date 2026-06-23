@@ -115,4 +115,12 @@ public class ProductManagement {
             System.out.println("No product found with keyword: " + keyword);
         }
     }
+    public Product GetProductById(int id) {
+        for (Product d : arr) {
+            if (d.getIdProduct() == id) {
+                return d;
+            }
+        }
+        return null;
+    }
 }

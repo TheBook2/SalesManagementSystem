@@ -2,10 +2,8 @@ package view;
 
 import java.util.Scanner;
 
-import model.Customer;
 import service.CustomerManagement;
 import service.ProductManagement;
-import util.Validators;
 
 /*  
  *  ==========================================
@@ -22,6 +20,8 @@ public class Main {
     public static void main(String[] args) throws Exception {
         int menuChoice; // biến điều kiển luồng menu
         Scanner sc = new Scanner(System.in);
+        CustomerManagement customerManagement = new CustomerManagement();
+        ProductManagement productManagement = new ProductManagement();
 
         // Menu Interface
         do {
@@ -40,14 +40,13 @@ public class Main {
             // Choice Options
             switch (menuChoice) {
                 case 1: { // Product Management
-                    ProductManagement productManagement = new ProductManagement();
                     int productChoice = -1; // biến điều khiển luồng product management
 
                     do {
                         System.out.println("======================================");
                         System.out.format("%27s", "Inventory Management\n");
                         System.out.println("======================================");
-                        System.out.println("   1. Add New Customer");
+                        System.out.println("   1. Add New Product");
                         System.out.println("   2. Update Customer Information");
                         System.out.println("   3. Remove Customer");
                         System.out.println("   4. View All Customer");
@@ -62,11 +61,9 @@ public class Main {
                                 break;
                             }
                             case 2: {
-                                productManagement.UpdateProduct();
                                 break;
                             }
                             case 3: {
-                                productManagement.RemoveProduct();
                                 break;
                             }
                             case 4: {
@@ -83,7 +80,6 @@ public class Main {
                     break;
                 }
                 case 2: { // Customer Mangement
-                    CustomerManagement customerManagement = new CustomerManagement();
                     int customerChoice = -1; // biến điều khiển luồng customer management
 
                     do {
@@ -101,62 +97,7 @@ public class Main {
 
                         switch (customerChoice) {
                             case 1: {
-                                // Dung vong lap de nhap lien tuc
-                                while (true) {
-                                    String id;
-                                    String name;
-                                    String phone;
-                                    String address;
-
-                                    System.out.println("----------- NEW CUSTOMER -----------");
-
-                                    // Input name
-                                    System.out.print("Name: ");
-                                    name = sc.nextLine();
-
-                                    // Input phone number
-                                    while (true) {
-                                        System.out.print("Phone number: ");
-                                        phone = sc.nextLine();
-
-                                        // Validate string
-                                        if (!Validators.PhoneValidation(phone)) {
-                                            System.out.println("This phone number is NOT valid");
-                                            continue;
-                                        }
-                                        if (!customerManagement.IsPhoneUnique(phone)) {
-                                            System.out.println("This phone number is available");
-                                            continue;
-                                        }
-                                        break;
-                                    }
-
-                                    // Input address
-                                    System.out.print("Address: ");
-                                    address = sc.nextLine();
-
-                                    // Save information
-                                    System.out.println("Do you want to save this information?[YES: 1/ NO: 0]: ");
-                                    int toSave = sc.nextInt();
-                                    sc.nextLine();
-
-                                    if (toSave == 1) {
-                                        id = String.format("C%02d", customerManagement.getCountCustomer() + 1);
-                                        Customer sCustomer = new Customer(id, name, phone, address);
-                                        customerManagement.AddNewCustomer(sCustomer);
-                                        System.out.println("Add new customer successfully!");
-                                    } else {
-                                        System.out.println("The customer's information is canceled.");
-                                        continue;
-                                    }
-
-                                    // Hoi user nhap tiep ko
-                                    System.out.println("Would you like to add more? [YES: 1/ NO: 0]");
-                                    int temp = sc.nextInt();
-                                    sc.nextLine();
-                                    if (temp == 1) continue;
-                                    else break;
-                                };
+                                customerManagement.AddNewCustomer();
                                 break;
                             }
                             case 2: {
@@ -164,7 +105,6 @@ public class Main {
                                 break;
                             }
                             case 3: {
-                                customerManagement.RemoveCustomer();
                                 break;
                             }
                             case 4: {
@@ -188,9 +128,10 @@ public class Main {
                         System.out.format("%27s", "Sales Transaction\n");
                         System.out.println("======================================");
                         System.out.println("   1. Create New Transaction");
-                        System.out.println("   2. Calculate Total Bill");
-                        System.out.println("   3. Update or Cancel Transaction");
-                        System.out.println("   4. View Transaction History");
+                        System.out.println("   2. Add/ Update Transaction");
+                        System.out.println("   3. Calculate Total Bill");
+                        System.out.println("   4. Delate Transaction");
+                        System.out.println("   5. View Transaction History");
                         System.out.println("   0. Back");
                         System.out.printf("Enter your choice> ");
                         transactionChoice = sc.nextInt();
@@ -198,6 +139,7 @@ public class Main {
 
                         switch (transactionChoice) {
                             case 1: {
+                                
                                 break;
                             }
                             case 2: {

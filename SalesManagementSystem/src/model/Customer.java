@@ -12,12 +12,13 @@ Method:
 + getDiscountRate(): double
 */
 
-public class Customer {
+public class Customer   {
     private String idCustomer; 
     private String nameCustomer;
     private String phoneCustomer;
     private String addressCustomer;
     private String customerType;
+    private boolean isActive;
     
     // Constructor
     public Customer() {
@@ -26,14 +27,16 @@ public class Customer {
         this.phoneCustomer = "";
         this.addressCustomer = "";
         this.customerType = "Regular";
+        this.isActive = true;
     }
 
     // Constructor with parameters
-    public Customer(String idCustomer, String nameCustomer, String phoneCustomer, String addressCustomer) {
+    public Customer(String idCustomer, String nameCustomer, String phoneCustomer, String addressCustomer, String customerType) {
         this.idCustomer = idCustomer;
         this.nameCustomer = nameCustomer;
         this.phoneCustomer = phoneCustomer;
         this.addressCustomer = addressCustomer;
+        this.customerType = customerType;
     }
 
     
@@ -84,5 +87,13 @@ public class Customer {
 
     public void setCustomerType(String customerType) {
         this.customerType = customerType;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean isActive) {
+        this.isActive = isActive;
     }
 }

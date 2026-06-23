@@ -1,24 +1,59 @@
 package model;
 
 public class TransactionItem {
-    private Product item;
+    private int productId; 
+    private String productName;
     private int quantity;
-    
-    public TransactionItem(Product item, int quantity) {
-        this.item = item;
-        this.quantity = quantity;
+    private double priceCopy;
+
+    public double getLineTotal() {
+        return quantity * priceCopy;
     }
 
-    public Product getItem() {
-        return item;
+    public String toString() {
+        return String.format("%-10s %-25s %-20s %-10s", productId, productName, quantity, priceCopy, getLineTotal());
     }
-    public void setItem(Product item) {
-        this.item = item;
+    public TransactionItem() {
     }
+    
+    public TransactionItem(int productId, String productName, int quantity, double priceCopy) {
+        this.productId = productId; 
+        this.productName = productName;
+        this.quantity = quantity;
+        this.priceCopy = priceCopy;
+    }
+
+    public int getProductId() {
+        return productId;
+    }
+
+    public void setProductId(int productId) {
+        this.productId = productId;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
     public int getQuantity() {
         return quantity;
     }
+
     public void setQuantity(int quantity) {
         this.quantity = quantity;
-    } 
+    }
+
+    public double getPriceCopy() {
+        return priceCopy;
+    }
+
+    public void setPriceCopy(double priceCopy) {
+        this.priceCopy = priceCopy;
+    }
+
+    
 }

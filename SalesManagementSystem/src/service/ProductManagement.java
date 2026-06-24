@@ -17,7 +17,7 @@ public class ProductManagement {
         return this.arr;
     }
 
-    public void AddNewProduct() {
+    public void AddNewProducts() {
         boolean cont = false;
         do {
             Product p = new Product();
@@ -31,11 +31,11 @@ public class ProductManagement {
         } while (cont);
     }
 
-    public void UpdateProduct(int id) {
+    public void UpdateProduct() {
         boolean cont = false;
         do {
             System.out.print("Enter product ID to update: ");
-            id = sc.nextInt();
+            int id = sc.nextInt();
             sc.nextLine(); // Đọc bỏ ký tự xuống dòng
 
             boolean found = false;
@@ -88,7 +88,7 @@ public class ProductManagement {
         System.out.println("Product not found to remove!");
     }
 
-    public void ViewAllProduct() {
+    public void ViewAllProducts() {
         if (arr.size() == 0) {
             System.out.println("Product list is empty!");
             return;

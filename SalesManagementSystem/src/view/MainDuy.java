@@ -34,16 +34,16 @@ public class MainDuy {
 
             switch (choice) {
                 case 1:
-                    pm.AddNewProduct();
+                    pm.AddNewProducts();
                     break;
 
                 case 2:
-                    pm.ViewAllProduct();
+                    pm.ViewAllProducts();
                     break;
 
                 case 3:
                     // Truyền tạm tham số id là 0 vì bên trong hàm của bạn sẽ hỏi lại id sau
-                    pm.UpdateProduct(0);
+                    pm.UpdateProduct();
                     break;
 
                 case 4:

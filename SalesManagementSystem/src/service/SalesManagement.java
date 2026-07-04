@@ -13,12 +13,12 @@ import model.Transaction;
 import model.TransactionItem;
 
 public class SalesManagement {
-    private ArrayList<Transaction> saleManagement = new ArrayList<>();     // Mảng lưu hóa đơn chính
-    private CustomerManagement refCustomerManagement;      // Biến tham chiếu Customer Management
+    private ArrayList<Transaction> saleManagement = new ArrayList<>(); // Mảng lưu hóa đơn chính
+    private CustomerManagement refCustomerManagement; // Biến tham chiếu Customer Management
     private ProductManagement refProductManagement;
-    private int transCount = 1;       // Biến đếm giao dịch - không phụ thuộc vào số lượng phần tử trong mảng                                            
+    private int transCount = 1; // Biến đếm giao dịch - không phụ thuộc vào số lượng phần tử trong mảng
     Scanner sc = new Scanner(System.in);
-    private DateTimeFormatter formatterCreatedDate = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");   // Định dạng ngày
+    private DateTimeFormatter formatterCreatedDate = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"); // Định dạng ngày
 
     // =====================================================================================================
 
@@ -27,8 +27,9 @@ public class SalesManagement {
 
         do {
             System.out.println("----------- NEW TRANSACTION -----------");
-            // Quy trinh kiem tra id/ phone number 
-            // Dành cho xác thực thông tin trước khi thực hiện 1 chức năng (thông tin đã tồn tại)
+            // Quy trinh kiem tra id/ phone number
+            // Dành cho xác thực thông tin trước khi thực hiện 1 chức năng (thông tin đã tồn
+            // tại)
             boolean validate = false;
             System.out.printf("Enter ID/ phone number> ");
             String infor = sc.nextLine();
@@ -38,7 +39,7 @@ public class SalesManagement {
                 if (refCustomerManagement.IsPhoneNumberExist(infor)) {
                     System.out.println("** The phone number is exist");
                     int index = refCustomerManagement.SearchCustomerIndexbyPhone(infor);
-                    infor = refCustomerManagement.GetIdCustomer(index);    // chuyen sang id de dung
+                    infor = refCustomerManagement.GetIdCustomer(index); // chuyen sang id de dung
                     validate = true;
                 } else {
                     System.out.println("** The phone number is NOT exist");
@@ -103,7 +104,7 @@ public class SalesManagement {
                 sc.nextLine();
 
                 // kiem tra san pham co ton tai ko?
-                Product foundProduct = refProductManagement.GetProductById(productId);
+                Product foundProduct = refProductManagement.getProductById(productId);
                 if (foundProduct == null) {
                     System.out.println("** Product is NOT found");
                 } else if (foundProduct.getStockQuantity() == 0) {
@@ -113,7 +114,7 @@ public class SalesManagement {
                     System.out.printf("%-10s %-25s %-20s %-10s\n",
                             foundProduct.getIdProduct(),
                             foundProduct.getNameProduct(),
-                            foundProduct.getPrice(),
+                            foundProduct.getPriceProduct(),
                             foundProduct.getStockQuantity());
 
                     do {
@@ -130,7 +131,7 @@ public class SalesManagement {
                                     foundProduct.getIdProduct(),
                                     foundProduct.getNameProduct(),
                                     quantity,
-                                    foundProduct.getPrice());
+                                    foundProduct.getPriceProduct());
                             transTmp.AddItem(item);
 
                             foundProduct.updateStockProduct(-quantity);
@@ -145,7 +146,7 @@ public class SalesManagement {
                 sc.nextLine();
             } while (cont);
         }
-}
+    }
     // =====================================================================================================
 
     public void CalculateTotalBillAmount() {
@@ -248,11 +249,11 @@ public class SalesManagement {
                     t.getIdCustomer(),
                     t.getCreatedDate(),
                     t.isDeleted() ? "Delete" : "Exist");
-        }   
+        }
     }
 
     // =====================================================================================================
-    
+
     private String generateIDtoTransaction() {
         return "T" + String.format("%03d", transCount);
     }
@@ -264,8 +265,10 @@ public class SalesManagement {
 
     public Transaction SearchTransactionByID(String id) {
         for (Transaction position : saleManagement) {
-            if (position.getIdTransaction().equals(id)) return position;
+            if (position.getIdTransaction().equals(id))
+                return position;
         }
         return null;
     }
+
 }

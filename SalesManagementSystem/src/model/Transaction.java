@@ -5,11 +5,12 @@ import service.IDelete;
 
 public class Transaction implements IDelete {
     private ArrayList<TransactionItem> lineItems = new ArrayList<TransactionItem>();
-    private String idCustomer; 
+    private String idCustomer;
     private String createdDate;
     private String exportDate;
     private String idTransaction;
     private boolean isDelete;
+    
 
     public void AddItem(TransactionItem newItem) {
         for (TransactionItem existing : lineItems) {
@@ -31,7 +32,7 @@ public class Transaction implements IDelete {
         return total;
     }
 
-     public void PrintLineItems() {
+    public void PrintLineItems() {
         if (lineItems.isEmpty()) {
             System.out.println("** No items in this transaction.");
             return;
@@ -69,6 +70,7 @@ public class Transaction implements IDelete {
         this.exportDate = "";
         this.isDelete = false;
     }
+
     public Transaction(String idCustomer, String createdDate, String exportDate, String idTransaction,
             boolean isDelete) {
         this.idCustomer = idCustomer;
@@ -84,38 +86,48 @@ public class Transaction implements IDelete {
         this.idTransaction = idTransaction;
         this.isDelete = isDelete;
     }
+
     // =====================================================================================================
     // Getter & setter
     public String getIdCustomer() {
         return idCustomer;
     }
+
     public void setIdCustomer(String idCustomer) {
         this.idCustomer = idCustomer;
     }
+
     public String getCreatedDate() {
         return createdDate;
     }
+
     public void setCreatedDate(String createdDate) {
         this.createdDate = createdDate;
     }
+
     public String getExportDate() {
         return exportDate;
     }
+
     public void setExportDate(String exportDate) {
         this.exportDate = exportDate;
     }
+
     public String getIdTransaction() {
         return idTransaction;
     }
+
     public void setIdTransaction(String idTransaction) {
         this.idTransaction = idTransaction;
     }
+
     public boolean isDelete() {
         return isDelete;
     }
+
     public void setDelete(boolean isDelete) {
         this.isDelete = isDelete;
     }
-    
+
     // =====================================================================================================
 }

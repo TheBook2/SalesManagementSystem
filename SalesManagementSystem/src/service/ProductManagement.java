@@ -29,31 +29,28 @@ public class ProductManagement {
         return this.arr;
     }
 
-    public void AddNewProducts() {
+    public void addNewProduct() {
         boolean cont = false;
         do {
             Product p = new Product();
-
             // 1. Vòng lặp bắt nhập ID duy nhất
             int id;
             while (true) {
                 System.out.print("ID: ");
                 id = sc.nextInt();
                 sc.nextLine(); // Đọc bỏ dòng thừa
-
-                if (GetProductById(id) != null) {
+                if (getProductById(id) != null) {
                     System.out.println("Error: This ID already exists! Please enter a unique ID.");
                 } else {
                     break; // ID hợp lệ
                 }
             }
             p.setIdProduct(id); // Gán ID vào đối tượng
-
             // 2. Vòng lặp bắt nhập TÊN duy nhất
             String name;
             while (true) {
                 System.out.print("Name: ");
-                name = sc.nextLine();
+                name = sc.nextLine().trim();// tự động xóa khoản trắng thừa đầu/cuối
 
                 if (isNameExists(name)) {
                     System.out.println("Error: This product name already exists! Please enter a unique name.");
@@ -72,7 +69,7 @@ public class ProductManagement {
 
     }
 
-    public void UpdateProduct() {
+    public void updateProduct() {
         boolean cont = false;
         do {
             System.out.print("Enter product ID to update: ");
@@ -84,18 +81,42 @@ public class ProductManagement {
             for (int i = 0; i < arr.size(); i++) {
                 if (arr.get(i).getIdProduct() == id) {
                     System.out.print("Enter new name: ");
-                    String name = sc.nextLine();
+                    String name = sc.nextLine().trim();
 
                     System.out.print("Enter new category: ");
-                    String category = sc.nextLine();
+                    String category = sc.nextLine().trim();
 
-                    System.out.print("Enter new price: ");
-                    double price = sc.nextDouble();
+                    double price;
+                    while (true) {
+                        System.out.print("Enter new price: ");
+                        if (sc.hasNextDouble()) {
+                            price = sc.nextDouble();
+                            sc.nextLine();
+                            arr.get(i).setPriceProduct(price);
+                            if (arr.get(i).getPriceProduct() == price) {
+                                break;
+                            }
+                        } else {
+                            System.out.println("Error: Price must be a number.");
+                            sc.nextLine();
+                        }
+                    }
 
+                    int stockQuantity;
+                    while (true){
                     System.out.print("Enter stock quantity: ");
-                    int stockQuantity = sc.nextInt();
-                    sc.nextLine(); // Đọc bỏ ký tự xuống dòng
-
+                    if (sc.hasNextInt()){
+                        stockQuantity = sc.nextInt();
+                        sc.nextLine();
+                        arr.get(i).setStockQuantity(stockQuantity);
+                        if (arr.get(i).getStockQuantity() == stockQuantity) {
+                            break; 
+                        }
+                    }else{
+                        System.out.println("Error: Stock quantity must be an integer.");
+                        sc.nextLine();
+                    }
+                }
                     // Cập nhật thông tin đối tượng tại vị trí i
                     arr.get(i).UpdateProduct(id, name, category, price, stockQuantity);
                     System.out.println("Update product successfully!");
@@ -116,7 +137,7 @@ public class ProductManagement {
     }
 
     // Hàm xóa phần tử: Dùng hàm .remove(index) thần thánh của ArrayList
-    public void RemoveProduct(int id) {
+    public void removeProduct(int id) {
         for (int i = 0; i < arr.size(); i++) {
             if (arr.get(i).getIdProduct() == id) {
 
@@ -129,7 +150,7 @@ public class ProductManagement {
         System.out.println("Product not found to remove!");
     }
 
-    public void ViewAllProducts() {
+    public void viewAllProduct() {
         if (arr.size() == 0) {
             System.out.println("Product list is empty!");
             return;
@@ -141,7 +162,7 @@ public class ProductManagement {
         }
     }
 
-    public void SearchProduct(String keyword) {
+    public void searchProduct(String keyword) {
         boolean found = false;
         // chuyển keyword về chữ thường trước để tối ưu tìm kiếm
         String lowerKeyword = keyword.toLowerCase();
@@ -160,7 +181,7 @@ public class ProductManagement {
         }
     }
 
-    public Product GetProductById(int id) {
+    public Product getProductById(int id) {
         for (Product d : arr) {
             if (d.getIdProduct() == id) {
                 return d;

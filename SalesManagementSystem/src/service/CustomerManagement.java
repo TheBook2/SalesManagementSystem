@@ -12,7 +12,7 @@ public class CustomerManagement {
     private int customerCount = 1;
 
     // =====================================================================================================
-    public void AddNewCustomer() {
+    public void addNewCustomer() {
         boolean addMore = false;
         do {
             String id;
@@ -31,7 +31,7 @@ public class CustomerManagement {
 
                 if (Validators.isValidPhone(phone)) {
                     System.out.println("** The phone number is valid");
-                    if (IsPhoneUnique(phone)) {
+                    if (isPhoneUnique(phone)) {
                         System.out.println("** The phone number is able to use");
                     } else {
                         System.out.println("** The phone number is already in use");
@@ -39,7 +39,7 @@ public class CustomerManagement {
                 } else {
                     System.out.println("** The phone number is NOT valid");
                 }
-            } while (!Validators.isValidPhone(phone) || !IsPhoneUnique(phone));
+            } while (!Validators.isValidPhone(phone) || !isPhoneUnique(phone));
 
             System.out.print("Address: ");
             address = sc.nextLine();
@@ -50,7 +50,7 @@ public class CustomerManagement {
             sc.nextLine();
 
             if (toSave) {
-                id = GenerateIDtoCustomer();
+                id = generateIDtoCustomer();
                 Customer sCustomer = new Customer(id, name, phone, address, "Regular");
                 customerArr.add(sCustomer);
                 customerCount++;
@@ -68,7 +68,7 @@ public class CustomerManagement {
 
     // =====================================================================================================
 
-    public void UpdateCustomerInfor() {
+    public void updateCustomerInfor() {
         int updateChoice = -1;
         String phoneTemp;
 
@@ -77,7 +77,7 @@ public class CustomerManagement {
         phoneTemp = sc.nextLine();
 
         // xác định phần tử chứa số điện thoại được nhập
-        int index = SearchCustomerIndexbyPhone(phoneTemp);
+        int index = searchCustomerIndexbyPhone(phoneTemp);
         if (index == -1) {
             System.out.println("** The phone number is NOT available");
             return;
@@ -125,7 +125,7 @@ public class CustomerManagement {
 
                     if (Validators.isValidPhone(phoneTemp)) {
                         System.out.println("** The phone number is valid");
-                        if (IsPhoneUnique(newPhone)) {
+                        if (isPhoneUnique(newPhone)) {
                             System.out.println("** The phone number is able to use");
                             customerArr.get(index).setPhoneCustomer(newPhone);
                         }
@@ -155,7 +155,7 @@ public class CustomerManagement {
 
     // =====================================================================================================
 
-    public void RemoveCustomer() {
+    public void removeCustomer() {
         int verify;
 
         System.out.println("----------- REMOVE CUSTOMER -----------");
@@ -163,7 +163,7 @@ public class CustomerManagement {
         String phone = sc.nextLine();
 
         // xác định phần tử chứa số điện thoại được nhập
-        int index = SearchCustomerIndexbyPhone(phone);
+        int index = searchCustomerIndexbyPhone(phone);
         if (index == -1) {
             System.out.println("The phone number is NOT available");
             return;
@@ -183,7 +183,7 @@ public class CustomerManagement {
     }
     // =====================================================================================================
 
-    public void ViewAllCustomer() {
+    public void viewAllCustomer() {
         System.out.println("----------- CUSTOMER LIST -----------");
         if (customerArr.isEmpty()) {
             System.out.println("** Customer list is empty");
@@ -217,7 +217,7 @@ public class CustomerManagement {
      */
 
     // kiếm tra sự trùng lặp phần tử số điện thoại trong mảng customers
-    public boolean IsPhoneUnique(String phone) {
+    public boolean isPhoneUnique(String phone) {
         for (int i = 0; i < customerArr.size(); i++) {
             if (customerArr.get(i).getPhoneCustomer().equals(phone)) {
                 return false;
@@ -227,7 +227,7 @@ public class CustomerManagement {
     }
 
     // tìm vị trí số điện thoại trong các phần tử được lưu trong mảng
-    public int SearchCustomerIndexbyPhone(String phone) {
+    public int searchCustomerIndexbyPhone(String phone) {
         if (phone == null) {
             System.out.println("Invalid input");
             return -1;
@@ -245,7 +245,7 @@ public class CustomerManagement {
     }
 
     // tìm kiếm số điện thoại trong mảng
-    public boolean IsPhoneNumberExist(String phone) {
+    public boolean isPhoneNumberExist(String phone) {
         for (int i = 0; i < customerArr.size(); i++) {
             if (customerArr.get(i).getPhoneCustomer().equals(phone)) {
                 return true;
@@ -254,7 +254,7 @@ public class CustomerManagement {
         return false;
     }
 
-    public boolean IsIdExit(String id) {
+    public boolean isIdExit(String id) {
         for (int i = 0; i < customerArr.size(); i++) {
             if (customerArr.get(i).getIdCustomer().equals(id)) 
                 return true;
@@ -262,11 +262,11 @@ public class CustomerManagement {
         return false;
     }
 
-    private String GenerateIDtoCustomer() {
+    private String generateIDtoCustomer() {
         return "C" + String.format("%03d", customerCount);
     }
 
-    public String GetIdCustomer(int index) {
+    public String getIdCustomer(int index) {
         return "" + customerArr.get(index).getIdCustomer();
     }
 }

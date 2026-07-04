@@ -10,8 +10,8 @@ public class Main_Son {
         CustomerManagement cManagement = new CustomerManagement();
         ProductManagement pManagement = new ProductManagement();
 
-        pManagement.AddNewProduct();  
-        cManagement.AddNewCustomer();
+        pManagement.addNewProduct();  
+        cManagement.addNewCustomer();
         SalesManagement test = new SalesManagement(cManagement, pManagement);
         Scanner sc = new Scanner(System.in); 
         int choice;
@@ -32,35 +32,37 @@ public class Main_Son {
 
             switch (choice) {
                 case 1: {
-                    test.CreateNewTransaction(sc);
+                    test.createNewTransaction(sc);
                     break;
                 }
                 case 2: {
-                    test.AddItemToTransaction(sc);
+                    test.addItemToTransaction(sc);
                     break;
                 }
                 case 3: {
-                    test.CalculateTotalBillAmount(sc);
+                    test.calculateTotalBillAmount(sc);
                     break;
                 }
                 case 4: {
-                    test.DeleteTransaction(sc);
+                    test.deleteTransaction(sc);
                     break;
                 }
                 case 5: {
-                    test.ViewTransactionHistory(sc);
+                    test.viewTransactionHistory(sc);
                     break;
                 }
                 case 6: {
-                    test.SearchTransactionInDetailed(sc);
+                    test.searchTransactionInDetailed(sc);
+                    break;
                 }
                 case 0: {
-                    System.out.println("Exiting....");                    
+                    System.out.println("Exiting....");    
+                    break;                
                 }
                 default: System.out.println("In sai roi kia");
             }
         } while (choice != 0);
-        pManagement.ViewAllProduct();
+        pManagement.viewAllProduct();
         sc.close();
     }
 }

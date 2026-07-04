@@ -24,7 +24,7 @@ public class SalesManagement {
 
     // =====================================================================================================
 
-    public void CreateNewTransaction(Scanner sc) {
+    public void createNewTransaction(Scanner sc) {
         boolean cont = false, save = false;
 
         do {
@@ -37,16 +37,16 @@ public class SalesManagement {
 
             if (Validators.isValidPhone(infor)) {
                 System.out.println("** The phone number is valid");
-                if (refCustomerManagement.IsPhoneNumberExist(infor)) {
+                if (refCustomerManagement.isPhoneNumberExist(infor)) {
                     System.out.println("** The phone number is exist");
-                    int index = refCustomerManagement.SearchCustomerIndexbyPhone(infor);
-                    infor = refCustomerManagement.GetIdCustomer(index);    // chuyen sang id de dung
+                    int index = refCustomerManagement.searchCustomerIndexbyPhone(infor);
+                    infor = refCustomerManagement.getIdCustomer(index);    // chuyen sang id de dung
                     validate = true;
                 } else {
                     System.out.println("** The phone number is NOT exist");
                 }
             } else if (Validators.isValidIdCustomer(infor)) { // them ham kiem tra id // them ham tim kiem id co ton tai ko
-                if (refCustomerManagement.IsIdExit(infor)) {
+                if (refCustomerManagement.isIdExit(infor)) {
                     System.out.println("** The Id is exist");
                     validate = true;
                 } else {
@@ -86,14 +86,14 @@ public class SalesManagement {
     }
 
     // =====================================================================================================
-    public void AddItemToTransaction(Scanner sc) {
+    public void addItemToTransaction(Scanner sc) {
         boolean cont;
 
         System.out.println("----------- Add Item into Transaction -----------");
         System.out.print("Enter ID's Transaction> ");
         String id = sc.nextLine();
 
-        Transaction transTmp = SearchTransactionByIDV1(id);
+        Transaction transTmp = searchTransactionByIDV1(id);
         if (transTmp == null) {
             System.out.println("** The bill is NOT found");
         } else if (transTmp.isDeleted()) {
@@ -153,13 +153,13 @@ public class SalesManagement {
 }
     // =====================================================================================================
 
-    public void CalculateTotalBillAmount(Scanner sc) {
+    public void calculateTotalBillAmount(Scanner sc) {
         System.out.println("----------- CALCULATE TOTAL BILL -----------");
         // Bước 1: Nhập và xác thực ID hóa đơn
         System.out.print("Enter Transaction ID> ");
         String id = sc.nextLine();
 
-        Transaction transTmp = SearchTransactionByIDV1(id);
+        Transaction transTmp = searchTransactionByIDV1(id);
         if (transTmp == null) {
             System.out.println("** Transaction NOT found.");
             return;
@@ -191,14 +191,14 @@ public class SalesManagement {
 
     // =====================================================================================================
 
-    public void DeleteTransaction(Scanner sc) {
+    public void deleteTransaction(Scanner sc) {
         boolean cont;
         do {
             System.out.println("----------- Delete Transaction -----------");
             System.out.print("Enter Transaction ID> ");
             String id = sc.nextLine();
 
-            Transaction transTmp = SearchTransactionByIDV1(id);
+            Transaction transTmp = searchTransactionByIDV1(id);
             if (transTmp == null) {
                 System.out.println("** Transaction NOT found.");
             } else if (transTmp.isDeleted()) {
@@ -225,7 +225,7 @@ public class SalesManagement {
 
     // =====================================================================================================
 
-    public void ViewTransactionHistory(Scanner sc) {
+    public void viewTransactionHistory(Scanner sc) {
         System.out.println("----------- Transaction History -----------");
 
         if (saleManagement.isEmpty()) {
@@ -269,20 +269,25 @@ public class SalesManagement {
     }
 
     // =====================================================================================================
-    public void SearchTransactionInDetailed(Scanner sc) {
+    public void searchTransactionInDetailed(Scanner sc) {
         System.out.println("----------- Search Transaction -----------");
         System.out.print("Enter ID Transaction> ");
         String id = sc.nextLine();
-
-        if (Validators.isValidIdCustomer(id) && SearchTransactionByIDV2(id)) {
-            Transaction temp = SearchTransactionByIDV1(id);
-            System.out.printf("ID Transaction: %15s\n", temp.getIdTransaction());
-            System.out.printf("ID Customer:    %15s\n", temp.getIdCustomer());
-            System.out.printf("Status:         %15s\n", temp.getStatus());
-            System.out.printf("Record:         %15s\n", temp.isDeleted());
-            System.out.printf("Created Date:   %25s\n", temp.getCreatedDate());
-            System.out.printf("Exported Date:  %25s\n", temp.getExportedDate());
-        } 
+        if (Validators.isValidIdTransaction(id)) {
+            Transaction temp = searchTransactionByIDV1(id);
+            if (temp != null) {
+                System.out.printf("ID Transaction: %15s\n", temp.getIdTransaction());
+                System.out.printf("ID Customer:    %15s\n", temp.getIdCustomer());
+                System.out.printf("Status:         %15s\n", temp.getStatus());
+                System.out.printf("Record:         %15s\n", temp.isDeleted() ? "Deleted" : "Existing");
+                System.out.printf("Created Date:   %25s\n", temp.getCreatedDate());
+                System.out.printf("Exported Date:  %25s\n", temp.getExportedDate());
+            } else {
+                System.out.println("** The ID is NOT found");
+            }
+        } else {
+            System.out.println("** The ID is NOT valid");
+        }
     }
     // =====================================================================================================
     
@@ -296,7 +301,7 @@ public class SalesManagement {
     }
 
     // Tìm hóa đơn, trả về đối tượng 
-    public Transaction SearchTransactionByIDV1(String id) {
+    public Transaction searchTransactionByIDV1(String id) {
         for (Transaction position : saleManagement) {
             if (position.getIdTransaction().equalsIgnoreCase(id)) return position;
         }
@@ -304,7 +309,7 @@ public class SalesManagement {
     }
 
     // Tìm hóa đơn, trả về 
-    public boolean SearchTransactionByIDV2(String id) {
+    public boolean searchTransactionByIDV2(String id) {
         for (Transaction t : saleManagement) {
             if (t.getIdCustomer().equalsIgnoreCase(id)) return true;
         }

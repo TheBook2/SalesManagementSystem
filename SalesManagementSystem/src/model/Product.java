@@ -116,14 +116,8 @@ public class Product {
 
     public void addNewProduct() {
         Scanner sc = new Scanner(System.in);
-        System.out.println("ID: ");
-        idProduct = sc.nextInt();
-        sc.nextLine(); // bỏ dognf thừa
-
-        System.out.println("Name: ");
-        nameProduct = sc.nextLine();
-
-        System.out.println("Category; ");
+        
+        System.out.println("Category: ");
         categoryProduct = sc.nextLine();
 
         System.out.println("Price: ");

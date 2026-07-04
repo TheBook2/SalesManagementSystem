@@ -97,18 +97,18 @@ public class Main {
 
                         switch (customerChoice) {
                             case 1: {
-                                customerManagement.AddNewCustomer();
+                                customerManagement.addNewCustomer();
                                 break;
                             }
                             case 2: {
-                                customerManagement.UpdateCustomerInfor();
+                                customerManagement.updateCustomerInfor();
                                 break;
                             }
                             case 3: {
                                 break;
                             }
                             case 4: {
-                                customerManagement.ViewAllCustomer();
+                                customerManagement.viewAllCustomer();
                                 break;
                             }
                             case 0: {
@@ -121,7 +121,7 @@ public class Main {
                     break;
                 }
                 case 3: { // Sales Transaction Management
-                    
+
                     int transactionChoice = -1;
 
                     do {

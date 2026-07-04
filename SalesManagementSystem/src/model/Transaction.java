@@ -44,7 +44,7 @@ public class Transaction implements IDelete {
             System.out.println(item.toString());
         }
         System.out.println("=====================================================================");
-        System.out.printf("TOTAL: %s58|\n", GetTotalAmount());
+        System.out.printf("TOTAL:    %-58s|\n", GetTotalAmount());
     }
 
     public enum TransactionStatus {

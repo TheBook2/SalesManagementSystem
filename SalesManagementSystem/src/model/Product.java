@@ -18,18 +18,19 @@ public class Product {
     private int idProduct;
     private String nameProduct;
     private String categoryProduct;
-    private double price;
+    private double priceProduct;
     private int stockQuantity;
 
     // Constructor
     public Product() {
+
     }
 
     public Product(int idProduct, String nameProduct, String categoryProduct, double price, int stockQuantity) {
         this.idProduct = idProduct;
         this.nameProduct = nameProduct;
         this.categoryProduct = categoryProduct;
-        setPrice(price);
+        setPriceProduct(price);
         setStockQuantity(stockQuantity);
     }
 
@@ -46,7 +47,7 @@ public class Product {
         this.idProduct = idProduct;
         this.nameProduct = nameProduct;
         this.categoryProduct = categoryProduct;
-        setPrice(price);
+        setPriceProduct(price);
         setStockQuantity(stockQuantity);
     }
 
@@ -54,7 +55,7 @@ public class Product {
         System.out.println("ID: " + idProduct);
         System.out.println("Name: " + nameProduct);
         System.out.println("Category: " + categoryProduct);
-        System.out.println("Price: " + price);
+        System.out.println("Price: " + priceProduct);
         System.out.println("Stock: " + stockQuantity);
     }
     // =====================================================================================================
@@ -88,17 +89,17 @@ public class Product {
     }
 
     // Price
-    public double getPrice() {
-        return price;
+    public double getPriceProduct() {
+        return priceProduct;
     }
 
-    public void setPrice(double price) {
+    public void setPriceProduct(double price) {
         if (price < 0) {
             System.out.println("Price cannot be negative!");
             return;
         }
 
-        this.price = price; // thêm điều kiện price ko đc âm
+        this.priceProduct = price; // thêm điều kiện price ko đc âm
     }
 
     // Stock Quantity
@@ -116,16 +117,28 @@ public class Product {
 
     public void addNewProduct() {
         Scanner sc = new Scanner(System.in);
-        
         System.out.println("Category; ");
-        categoryProduct = sc.nextLine();
+        categoryProduct = sc.nextLine().trim();
 
-        System.out.println("Price: ");
-        price = sc.nextDouble();
+        while (true) {
+            System.out.println("Price: ");
+            double inputPrice = sc.nextDouble();
+            sc.nextLine();
+            this.setPriceProduct(inputPrice);
+            if (this.priceProduct == inputPrice) {
+                break;
+            }
+        }
+        while (true) {
+            System.out.print("Stock Quantity: ");
+            int inputStock = sc.nextInt();
+            sc.nextLine();
+            this.setStockQuantity(inputStock);
+            if (this.stockQuantity == inputStock) {
+                break;
+            }
+        }
 
-        System.out.print("Stock Quantity: ");
-        stockQuantity = sc.nextInt();
-        sc.nextLine();
     }
 
 }

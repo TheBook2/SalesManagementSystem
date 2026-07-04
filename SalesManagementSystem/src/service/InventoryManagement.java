@@ -1,16 +1,20 @@
 package service;
 
 import java.util.ArrayList;
-
 import model.Product;
 
 public class InventoryManagement {
     private ArrayList<Product> inventory; // lấy tính chất của Product
     private ProductManagement pm; // pm - product management, lấy tính chất mảng
 
+    // Sửa Constructor để nhận thêm SalesManagement của bạn mình
     public InventoryManagement(ProductManagement pm) {
         this.pm = pm;
-        this.inventory = pm.getArr(); // lấy dữ liệu từ lớp ProductManagement
+        this.inventory = pm.getArr(); // Lấy dữ liệu từ ProductManagement của bạn
+    }
+
+    public InventoryManagement() {
+
     }
 
     /**
@@ -25,12 +29,16 @@ public class InventoryManagement {
         return null; // Không tìm thấy
     }
 
-    public void UpdateProductAfterSale(int idProduct, int quantitySold) {
+    public void updateProductAfterSale(int idProduct, int quantitySold) {
         Product p = findProductById(idProduct);
 
         if (p == null) {
             System.out.println("Product not found!");
             return;
+        }
+        //bẫy lỗi
+        if (quantitySold <= 0 || p.getStockQuantity() < quantitySold) {
+            System.out.println("Error: Invalid quantity to deduct stock!");
         }
 
         p.setStockQuantity(p.getStockQuantity() - quantitySold);
@@ -40,14 +48,14 @@ public class InventoryManagement {
 
     }
 
-    public boolean CheckAvailableStock(int idProduct, int quantitySold) {
+    public boolean checkAvailableStock(int idProduct, int quantitySold) {
         if (quantitySold <= 0) {
             System.out.println("Error: Quantity sold must be greater than 0!");
             return false;
         }
 
         Product p = findProductById(idProduct);
-        
+
         // BR3: Kiểm tra xem sản phẩm có tồn tại trong kho không
         if (p == null) {
             System.out.println("Error: Product ID not found!");
@@ -62,7 +70,7 @@ public class InventoryManagement {
 
         // Đạt mọi điều kiện hợp lệ
         System.out.println("Valid: Sufficient stock available for the sale.");
-        return true; 
+        return true;
     }
-    
+
 }

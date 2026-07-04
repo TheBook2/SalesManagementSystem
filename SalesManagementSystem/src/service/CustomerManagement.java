@@ -1,18 +1,69 @@
 package service;
 
 import java.util.Scanner;
-import model.customer.Customer;
+import java.util.ArrayList;
+
+import model.Customer;
+import util.Validators;
 
 public class CustomerManagement {
-    private Customer[] customers = new Customer[100];
+    private ArrayList<Customer> customerArr = new ArrayList<>();
     Scanner sc = new Scanner(System.in);
-    private int countCustomer = 0;
+    private int customerCount = 1;
 
     // =====================================================================================================
+    public void AddNewCustomer() {
+        boolean addMore = false;
+        do {
+            String id;
+            String name;
+            String phone;
+            String address;
 
-    public void AddNewCustomer(Customer customer) {
-        this.customers[countCustomer] = customer;
-        this.countCustomer++;  
+            System.out.println("----------- NEW CUSTOMER -----------");
+            System.out.print("Name: ");
+            name = sc.nextLine();
+
+            // Vòng lặp validate phone: lặp lại cho đến khi phone hợp lệ VÀ chưa tồn tại
+            do {
+                System.out.print("Phone number: ");
+                phone = sc.nextLine();
+
+                if (Validators.PhoneValidation(phone)) {
+                    System.out.println("** The phone number is valid");
+                    if (IsPhoneUnique(phone)) {
+                        System.out.println("** The phone number is able to use");
+                    } else {
+                        System.out.println("** The phone number is already in use");
+                    }
+                } else {
+                    System.out.println("** The phone number is NOT valid");
+                }
+            } while (!Validators.PhoneValidation(phone) || !IsPhoneUnique(phone));
+
+            System.out.print("Address: ");
+            address = sc.nextLine();
+
+            // Hỏi người dùng có muốn lưu không
+            System.out.print("Do you want to save? [YES: true/ NO: false]: ");
+            boolean toSave = sc.nextBoolean();
+            sc.nextLine();
+
+            if (toSave) {
+                id = GenerateIDtoCustomer();
+                Customer sCustomer = new Customer(id, name, phone, address, "Regular");
+                customerArr.add(sCustomer);
+                customerCount++;
+                System.out.println("** Add new customer successfully!");
+            } else {
+                System.out.println("** The customer's information is canceled.");
+            }
+
+            // Hỏi có muốn thêm tiếp không
+            System.out.print("Would you like to add more? [YES: true/ NO: false]: ");
+            addMore = sc.nextBoolean();
+            sc.nextLine();;
+        } while (addMore);
     }
 
     // =====================================================================================================
@@ -26,25 +77,24 @@ public class CustomerManagement {
         phoneTemp = sc.nextLine();
 
         // xác định phần tử chứa số điện thoại được nhập
-        int index = FindCustomerIndexbyPhone(phoneTemp);
+        int index = SearchCustomerIndexbyPhone(phoneTemp);
         if (index == -1) {
-            System.out.println("This phone number is NOT available");
+            System.out.println("** The phone number is NOT available");
             return;
         } else {
-            System.out.format("Customer Information: %s\n", customers[index].getNameCustomer());
+            System.out.format("Customer Information: %s\n", customerArr.get(index).getNameCustomer());
+            // hiển thị thông tin khách hành xác định
+            System.out.printf("%-5s %-20s %-15s %-25s %-10s\n", "ID", "Name", "Phone", "Address", "Type");
+            System.out.println("-----------------------------------------------------------------------------");
+
+            // format 5 - 20 - 15 - 25 - 10
+            System.out.format("%-5s %-20s %-15s %-25s %-10s\n",
+                    customerArr.get(index).getIdCustomer(),
+                    customerArr.get(index).getNameCustomer(),
+                    customerArr.get(index).getPhoneCustomer(),
+                    customerArr.get(index).getAddressCustomer(),
+                    customerArr.get(index).getCustomerType());
         }
-
-        // hiển thị thông tin khách hành xác định
-        System.out.printf("%-5s %-20s %-15s %-25s %-10s\n", "ID", "Name", "Phone", "Address", "Type");
-        System.out.println("-----------------------------------------------------------------------------");
-
-        // format 5 - 20 - 15 - 25 - 10
-        System.out.format("%-5d %-20s %-15s %-25s %-10s\n",
-                customers[index].getIdCustomer(),
-                customers[index].getNameCustomer(),
-                customers[index].getPhoneCustomer(),
-                customers[index].getAddressCustomer(),
-                customers[index].getCustomerType());
 
         // thực thi quá trình cập nhật thông tin
         do {
@@ -64,7 +114,7 @@ public class CustomerManagement {
                     System.out.print("New Name: ");
                     newName = sc.nextLine();
 
-                    customers[index].setNameCustomer(newName);
+                    customerArr.get(index).setNameCustomer(newName);
                     break;
                 }
                 case 2: { // Phone
@@ -73,7 +123,15 @@ public class CustomerManagement {
                     System.out.print("New phone number: ");
                     newPhone = sc.nextLine();
 
-                    customers[index].setPhoneCustomer(newPhone);
+                    if (Validators.PhoneValidation(phoneTemp)) {
+                        System.out.println("** The phone number is valid");
+                        if (IsPhoneUnique(newPhone)) {
+                            System.out.println("** The phone number is able to use");
+                            customerArr.get(index).setPhoneCustomer(newPhone);
+                        }
+                    } else {
+                        System.out.println("** The phone number is NOT valid");
+                    }
                     break;
                 }
                 case 3: { // Address
@@ -82,7 +140,7 @@ public class CustomerManagement {
                     System.out.print("New address: ");
                     newAddress = sc.nextLine();
 
-                    customers[index].setAddressCustomer(newAddress);
+                    customerArr.get(index).setAddressCustomer(newAddress);
                     break;
                 }
                 case 0: {
@@ -105,7 +163,7 @@ public class CustomerManagement {
         String phone = sc.nextLine();
 
         // xác định phần tử chứa số điện thoại được nhập
-        int index = FindCustomerIndexbyPhone(phone);
+        int index = SearchCustomerIndexbyPhone(phone);
         if (index == -1) {
             System.out.println("The phone number is NOT available");
             return;
@@ -118,46 +176,36 @@ public class CustomerManagement {
 
         // xác nhận quá trình, xóa = 1/ hủy = 0;
         if (verify == 1) {
-            // xóa phần tử bằng việc dịch lùi phần tử
-            for (int i = index; i < countCustomer - 1; i++) {
-                customers[i] = customers[i + 1];
-
-                // cập nhật biến đếm
-                customers[countCustomer - 1] = null;
-                System.out.println("Customer removed successfully!");
-            }
-            countCustomer--;
+            customerArr.remove(index);
         } else {
             System.out.println("The process is canceled. Returning ...");
         }
     }
-
     // =====================================================================================================
 
     public void ViewAllCustomer() {
         System.out.println("----------- CUSTOMER LIST -----------");
+        if (customerArr.isEmpty()) {
+            System.out.println("** Customer list is empty");
+        } else {
+            // format 5 - 20 - 15 - 25 - 10
+            System.out.printf("%-7s %-20s %-15s %-25s %-10s\n", "ID", "Name", "Phone", "Address", "Type");
+            System.out.println("-----------------------------------------------------------------------------");
 
-        // kiểm tra số lượng hợp lệ
-        if (countCustomer == 0) {
-            System.out.println("No customers available in the system.");
-            return;
+            // duyệt các phần tử theo mảng để hiện từng phần tử
+            for (int i = 0; i < customerArr.size(); i++) {
+                Customer p = customerArr.get(i);
+                System.out.printf("%-7s %-20s %-15s %-25s %-10s\n",
+                        p.getIdCustomer(),
+                        p.getNameCustomer(),
+                        p.getPhoneCustomer(),
+                        p.getAddressCustomer(),
+                        p.getCustomerType());
+            }
+            System.out.println("-----------------------------------------------------------------------------");
+            System.out.println("** Press Enter to countinue...");
+            sc.nextLine();
         }
-
-        // format 5 - 20 - 15 - 25 - 10
-        System.out.printf("%-5s %-20s %-15s %-25s %-10s\n", "ID", "Name", "Phone", "Address", "Type");
-        System.out.println("-----------------------------------------------------------------------------");
-
-        // duyệt các phần tử theo mảng để hiện từng phần tử
-        for (int i = 0; i < countCustomer; i++) {
-            Customer p = customers[i];
-            System.out.printf("%-5d %-20s %-15s %-25s %-10s\n",
-                    p.getIdCustomer(),
-                    p.getNameCustomer(),
-                    p.getPhoneCustomer(),
-                    p.getAddressCustomer(),
-                    p.getCustomerType());
-        }
-        System.out.println("-----------------------------------------------------------------------------");
     }
 
     // =====================================================================================================
@@ -170,24 +218,24 @@ public class CustomerManagement {
 
     // kiếm tra sự trùng lặp phần tử số điện thoại trong mảng customers
     public boolean IsPhoneUnique(String phone) {
-        for (int i = 0; i < countCustomer; i++) {
-            if (customers[i].getPhoneCustomer().equals(phone)) {
+        for (int i = 0; i < customerArr.size(); i++) {
+            if (customerArr.get(i).getPhoneCustomer().equals(phone)) {
                 return false;
             }
         }
         return true;
     }
 
-    // tìm số điện thoại trong các phần tử được lưu trong mảng
-    public int FindCustomerIndexbyPhone(String phone) {
+    // tìm vị trí số điện thoại trong các phần tử được lưu trong mảng
+    public int SearchCustomerIndexbyPhone(String phone) {
         if (phone == null) {
             System.out.println("Invalid input");
             return -1;
         }
 
         // tìm vị trí phần tử chứa sdt trùng với input
-        for (int i = 0; i < countCustomer; i++) {
-            if (customers[i].getPhoneCustomer().equals(phone)) {
+        for (int i = 0; i < customerArr.size(); i++) {
+            if (customerArr.get(i).getPhoneCustomer().equals(phone)) {
                 return i;
             }
         }
@@ -196,12 +244,29 @@ public class CustomerManagement {
         return -1;
     }
 
-    public int getCountCustomer() {
-        return countCustomer;
+    // tìm kiếm số điện thoại trong mảng
+    public boolean IsPhoneNumberExist(String phone) {
+        for (int i = 0; i < customerArr.size(); i++) {
+            if (customerArr.get(i).getPhoneCustomer().equals(phone)) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    public Customer[] getCustomers() {
-        return customers;
+    public boolean IsIdExit(String id) {
+        for (int i = 0; i < customerArr.size(); i++) {
+            if (customerArr.get(i).getIdCustomer().equals(id)) 
+                return true;
+        }
+        return false;
     }
-    
+
+    private String GenerateIDtoCustomer() {
+        return "C" + String.format("%03d", customerCount);
+    }
+
+    public String GetIdCustomer(int index) {
+        return "" + customerArr.get(index).getIdCustomer();
+    }
 }

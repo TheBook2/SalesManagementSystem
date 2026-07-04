@@ -29,8 +29,9 @@ public class SalesManagement {
 
         do {
             System.out.println("----------- NEW TRANSACTION -----------");
-            // Quy trinh kiem tra id/ phone number 
-            // Dành cho xác thực thông tin trước khi thực hiện 1 chức năng (thông tin đã tồn tại)
+            // Quy trinh kiem tra id/ phone number
+            // Dành cho xác thực thông tin trước khi thực hiện 1 chức năng (thông tin đã tồn
+            // tại)
             boolean validate = false;
             System.out.printf("Enter ID/ phone number> ");
             String infor = sc.nextLine();
@@ -117,7 +118,7 @@ public class SalesManagement {
                     System.out.printf("%-10d %-25s %-20.2f %-10s\n",
                             foundProduct.getIdProduct(),
                             foundProduct.getNameProduct(),
-                            foundProduct.getPrice(),
+                            foundProduct.getPriceProduct(),
                             foundProduct.getStockQuantity());
 
                     do {
@@ -134,7 +135,7 @@ public class SalesManagement {
                                     foundProduct.getIdProduct(),
                                     foundProduct.getNameProduct(),
                                     quantity,
-                                    foundProduct.getPrice());
+                                    foundProduct.getPriceProduct());
                             transTmp.AddItem(item);
 
                             foundProduct.updateStockProduct(-quantity);
@@ -150,7 +151,7 @@ public class SalesManagement {
             } while (cont);
             transTmp.setStatus(TransactionStatus.PENDING);
         }
-}
+    }
     // =====================================================================================================
 
     public void calculateTotalBillAmount(Scanner sc) {

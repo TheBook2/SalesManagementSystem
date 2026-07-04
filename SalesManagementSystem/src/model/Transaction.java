@@ -5,7 +5,7 @@ import service.IDelete;
 
 public class Transaction implements IDelete {
     private ArrayList<TransactionItem> lineItems = new ArrayList<TransactionItem>();
-    private String idCustomer; 
+    private String idCustomer;
     private String createdDate;
     private String exportedDate;
     private String idTransaction;
@@ -32,7 +32,7 @@ public class Transaction implements IDelete {
         return total;
     }
 
-     public void PrintLineItems() {
+    public void PrintLineItems() {
         if (lineItems.isEmpty()) {
             System.out.println("** No items in this transaction.");
             return;
@@ -95,17 +95,21 @@ public class Transaction implements IDelete {
         this.status = TransactionStatus.ACTIVE;
         this.isDeleted = isDeleted;
     }
+
     // =====================================================================================================
     // Getter & setter
     public String getIdCustomer() {
         return idCustomer;
     }
+
     public void setIdCustomer(String idCustomer) {
         this.idCustomer = idCustomer;
     }
+
     public String getCreatedDate() {
         return createdDate;
     }
+
     public void setCreatedDate(String createdDate) {
         this.createdDate = createdDate;
     }
@@ -115,9 +119,11 @@ public class Transaction implements IDelete {
     public void setExportDate(String exportedDate) {
         this.exportedDate = exportedDate;
     }
+
     public String getIdTransaction() {
         return idTransaction;
     }
+
     public void setIdTransaction(String idTransaction) {
         this.idTransaction = idTransaction;
     }

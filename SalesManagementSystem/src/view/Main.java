@@ -57,7 +57,7 @@ public class Main {
 
                         switch (productChoice) {
                             case 1: {
-                                productManagement.AddNewProduct();
+                                productManagement.addNewProduct();
                                 break;
                             }
                             case 2: {
@@ -67,7 +67,7 @@ public class Main {
                                 break;
                             }
                             case 4: {
-                                productManagement.ViewAllProduct();
+                                productManagement.viewAllProduct();
                                 break;
                             }
                             case 0: {

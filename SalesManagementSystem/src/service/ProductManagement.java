@@ -9,6 +9,17 @@ public class ProductManagement {
     private ArrayList<Product> arr = new ArrayList<>();
     private Scanner sc = new Scanner(System.in);
 
+    // Hàm hỗ trợ kiểm tra xem tên sản phẩm đã tồn tại hay chưa (không phân biệt hoa
+    // thường)
+    public boolean isNameExists(String name) {
+        for (Product p : arr) {
+            if (p.getNameProduct().equalsIgnoreCase(name)) {
+                return true; // Đã tồn tại tên này
+            }
+        }
+        return false; // Chưa tồn tại
+    }
+
     // Trả về size của ArrayList thay vì dùng biến countProduct riêng
     public int getCountProduct() {
         return arr.size();
@@ -18,25 +29,54 @@ public class ProductManagement {
         return this.arr;
     }
 
-    public void AddNewProduct() {
+    public void AddNewProducts() {
         boolean cont = false;
         do {
             Product p = new Product();
-            p.addNewProduct();
 
-            arr.add(p); // thêm đối tượng vào arraylist
+            // 1. Vòng lặp bắt nhập ID duy nhất
+            int id;
+            while (true) {
+                System.out.print("ID: ");
+                id = sc.nextInt();
+                sc.nextLine(); // Đọc bỏ dòng thừa
+
+                if (GetProductById(id) != null) {
+                    System.out.println("Error: This ID already exists! Please enter a unique ID.");
+                } else {
+                    break; // ID hợp lệ
+                }
+            }
+            p.setIdProduct(id); // Gán ID vào đối tượng
+
+            // 2. Vòng lặp bắt nhập TÊN duy nhất
+            String name;
+            while (true) {
+                System.out.print("Name: ");
+                name = sc.nextLine();
+
+                if (isNameExists(name)) {
+                    System.out.println("Error: This product name already exists! Please enter a unique name.");
+                } else {
+                    break; // Tên hợp lệ
+                }
+            }
+            p.setNameProduct(name); // Gán Name vào đối tượng
+            p.addNewProduct();
+            arr.add(p);
 
             System.out.print("Add more (true/false)? ");
             cont = sc.nextBoolean();
-            sc.nextLine(); // Sửa lỗi trôi lệnh: Đọc bỏ ký tự xuống dòng sau khi nhập boolean
+            sc.nextLine();
         } while (cont);
+
     }
 
-    public void UpdateProduct(int id) {
+    public void UpdateProduct() {
         boolean cont = false;
         do {
             System.out.print("Enter product ID to update: ");
-            id = sc.nextInt();
+            int id = sc.nextInt();
             sc.nextLine(); // Đọc bỏ ký tự xuống dòng
 
             boolean found = false;
@@ -89,7 +129,7 @@ public class ProductManagement {
         System.out.println("Product not found to remove!");
     }
 
-    public void ViewAllProduct() {
+    public void ViewAllProducts() {
         if (arr.size() == 0) {
             System.out.println("Product list is empty!");
             return;
@@ -103,11 +143,15 @@ public class ProductManagement {
 
     public void SearchProduct(String keyword) {
         boolean found = false;
+        // chuyển keyword về chữ thường trước để tối ưu tìm kiếm
+        String lowerKeyword = keyword.toLowerCase();
         for (int i = 0; i < arr.size(); i++) {
+            Product p = arr.get(i);
+
             // Lấy từng sản phẩm bằng arr.get(i) để kiểm tra
-            if (arr.get(i).getNameProduct().equalsIgnoreCase(keyword)
-                    || arr.get(i).getCategoryProduct().equalsIgnoreCase(keyword)) {
-                arr.get(i).viewAllProduct();
+            if (p.getNameProduct().toLowerCase().contains(lowerKeyword)
+                    || p.getCategoryProduct().toLowerCase().contains(lowerKeyword)) {
+                p.viewAllProduct();
                 found = true;
             }
         }
@@ -115,6 +159,7 @@ public class ProductManagement {
             System.out.println("No product found with keyword: " + keyword);
         }
     }
+
     public Product GetProductById(int id) {
         for (Product d : arr) {
             if (d.getIdProduct() == id) {

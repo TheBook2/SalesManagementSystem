@@ -3,24 +3,26 @@ package model;
 public class TransactionItem {
     private int productId; 
     private String productName;
-    private int quantity;
-    private double priceCopy;
+    private int snapshot_quantity;
+    private double snapshot_price;
 
     public double getLineTotal() {
-        return quantity * priceCopy;
+        return snapshot_quantity * snapshot_price;
     }
 
+    @Override
     public String toString() {
-        return String.format("%-10s %-25s %-20s %-10s", productId, productName, quantity, priceCopy, getLineTotal());
+        return String.format("%10s|%25s|%15s|%15s|", productId, productName, snapshot_quantity, snapshot_price, getLineTotal());
     }
+    
     public TransactionItem() {
     }
     
-    public TransactionItem(int productId, String productName, int quantity, double priceCopy) {
+    public TransactionItem(int productId, String productName, int snapshot_quantity, double snapshot_price) {
         this.productId = productId; 
         this.productName = productName;
-        this.quantity = quantity;
-        this.priceCopy = priceCopy;
+        this.snapshot_quantity = snapshot_quantity;
+        this.snapshot_price = snapshot_price;
     }
 
     public int getProductId() {
@@ -40,19 +42,19 @@ public class TransactionItem {
     }
 
     public int getQuantity() {
-        return quantity;
+        return snapshot_quantity;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public void setQuantity(int snapshot_quantity) {
+        this.snapshot_quantity = snapshot_quantity;
     }
 
     public double getPriceCopy() {
-        return priceCopy;
+        return snapshot_price;
     }
 
-    public void setPriceCopy(double priceCopy) {
-        this.priceCopy = priceCopy;
+    public void setPriceCopy(double snapshot_price) {
+        this.snapshot_price = snapshot_price;
     }
 
     

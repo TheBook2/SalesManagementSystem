@@ -29,7 +29,7 @@ public class CustomerManagement {
                 System.out.print("Phone number: ");
                 phone = sc.nextLine();
 
-                if (Validators.PhoneValidation(phone)) {
+                if (Validators.isValidPhone(phone)) {
                     System.out.println("** The phone number is valid");
                     if (IsPhoneUnique(phone)) {
                         System.out.println("** The phone number is able to use");
@@ -39,7 +39,7 @@ public class CustomerManagement {
                 } else {
                     System.out.println("** The phone number is NOT valid");
                 }
-            } while (!Validators.PhoneValidation(phone) || !IsPhoneUnique(phone));
+            } while (!Validators.isValidPhone(phone) || !IsPhoneUnique(phone));
 
             System.out.print("Address: ");
             address = sc.nextLine();
@@ -123,7 +123,7 @@ public class CustomerManagement {
                     System.out.print("New phone number: ");
                     newPhone = sc.nextLine();
 
-                    if (Validators.PhoneValidation(phoneTemp)) {
+                    if (Validators.isValidPhone(phoneTemp)) {
                         System.out.println("** The phone number is valid");
                         if (IsPhoneUnique(newPhone)) {
                             System.out.println("** The phone number is able to use");

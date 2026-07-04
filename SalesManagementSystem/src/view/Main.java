@@ -121,6 +121,7 @@ public class Main {
                     break;
                 }
                 case 3: { // Sales Transaction Management
+                    
                     int transactionChoice = -1;
 
                     do {
@@ -132,6 +133,7 @@ public class Main {
                         System.out.println("   3. Calculate Total Bill");
                         System.out.println("   4. Delate Transaction");
                         System.out.println("   5. View Transaction History");
+                        System.out.println("   6. Search Bill in Detailed");
                         System.out.println("   0. Back");
                         System.out.printf("Enter your choice> ");
                         transactionChoice = sc.nextInt();

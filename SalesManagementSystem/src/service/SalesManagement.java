@@ -11,18 +11,20 @@ import model.Product;
 import util.Validators;
 import model.Transaction;
 import model.TransactionItem;
+import model.Transaction.TransactionStatus;
 
 public class SalesManagement {
     private ArrayList<Transaction> saleManagement = new ArrayList<>();     // Mảng lưu hóa đơn chính
+    private int transCount = 1;       // Biến đếm giao dịch - không phụ thuộc vào số lượng phần tử trong mảng
+    
     private CustomerManagement refCustomerManagement;      // Biến tham chiếu Customer Management
-    private ProductManagement refProductManagement;
-    private int transCount = 1;       // Biến đếm giao dịch - không phụ thuộc vào số lượng phần tử trong mảng                                            
-    Scanner sc = new Scanner(System.in);
-    private DateTimeFormatter formatterCreatedDate = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");   // Định dạng ngày
+    private ProductManagement refProductManagement;        // Biến tham chiếu Product Management
+
+    private DateTimeFormatter currentDate = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");   // Định dạng ngày
 
     // =====================================================================================================
 
-    public void CreateNewTransaction() {
+    public void CreateNewTransaction(Scanner sc) {
         boolean cont = false, save = false;
 
         do {
@@ -33,7 +35,7 @@ public class SalesManagement {
             System.out.printf("Enter ID/ phone number> ");
             String infor = sc.nextLine();
 
-            if (Validators.PhoneValidation(infor)) {
+            if (Validators.isValidPhone(infor)) {
                 System.out.println("** The phone number is valid");
                 if (refCustomerManagement.IsPhoneNumberExist(infor)) {
                     System.out.println("** The phone number is exist");
@@ -43,7 +45,7 @@ public class SalesManagement {
                 } else {
                     System.out.println("** The phone number is NOT exist");
                 }
-            } else if (Validators.IdValidation(infor)) { // them ham kiem tra id // them ham tim kiem id co ton tai ko
+            } else if (Validators.isValidIdCustomer(infor)) { // them ham kiem tra id // them ham tim kiem id co ton tai ko
                 if (refCustomerManagement.IsIdExit(infor)) {
                     System.out.println("** The Id is exist");
                     validate = true;
@@ -67,7 +69,7 @@ public class SalesManagement {
                 sc.nextLine();
 
                 if (save) {
-                    String createdDate = LocalDateTime.now().format(formatterCreatedDate);
+                    String createdDate = LocalDateTime.now().format(currentDate);
                     Transaction tmp = new Transaction(infor, createdDate, idTransactionTmp, false);
                     saleManagement.add(tmp);
                     transCount++;
@@ -77,40 +79,42 @@ public class SalesManagement {
                 }
             }
 
-            System.out.println("Do you want to create more?[YES: true/ NO: false]> ");
+            System.out.printf("Do you want to create more?[YES: true/ NO: false]> ");
             cont = sc.nextBoolean();
             sc.nextLine();
         } while (cont);
     }
 
     // =====================================================================================================
-    public void AddItemToTransaction() {
+    public void AddItemToTransaction(Scanner sc) {
         boolean cont;
 
         System.out.println("----------- Add Item into Transaction -----------");
-        System.out.println("Enter ID transaction> ");
+        System.out.print("Enter ID's Transaction> ");
         String id = sc.nextLine();
 
-        Transaction transTmp = SearchTransactionByID(id);
+        Transaction transTmp = SearchTransactionByIDV1(id);
         if (transTmp == null) {
-            System.out.println("** Transaction is NOT found");
-        } else if (transTmp.isDelete()) {
-            System.out.println("** Transaction has been deleted");
+            System.out.println("** The bill is NOT found");
+        } else if (transTmp.isDeleted()) {
+            System.out.println("** The bill has been deleted");
+        } else if (transTmp.getStatus() == TransactionStatus.CLOSED) {
+            System.out.println("** The bill already closed");
         } else {
             do {
-                System.out.printf("Enter Product ID> ");
+                System.out.printf("Enter ID's Product> ");
                 int productId = sc.nextInt();
                 sc.nextLine();
 
                 // kiem tra san pham co ton tai ko?
-                Product foundProduct = refProductManagement.GetProductById(productId);
+                Product foundProduct = refProductManagement.getProductById(productId);
                 if (foundProduct == null) {
                     System.out.println("** Product is NOT found");
                 } else if (foundProduct.getStockQuantity() == 0) {
                     System.out.println("** Product is out of stock");
                 } else {
                     System.out.printf("%-10s %-25s %-20s %-10s\n", "ID", "Name Product", "Price", "Quantity");
-                    System.out.printf("%-10s %-25s %-20s %-10s\n",
+                    System.out.printf("%-10d %-25s %-20.2f %-10s\n",
                             foundProduct.getIdProduct(),
                             foundProduct.getNameProduct(),
                             foundProduct.getPrice(),
@@ -140,21 +144,22 @@ public class SalesManagement {
                     } while (true);
                 }
 
-                System.out.print("Add more items? [true/false]> ");
+                System.out.print("Add more items? [YES: true/ NO: false]> ");
                 cont = sc.nextBoolean();
                 sc.nextLine();
             } while (cont);
+            transTmp.setStatus(TransactionStatus.PENDING);
         }
 }
     // =====================================================================================================
 
-    public void CalculateTotalBillAmount() {
+    public void CalculateTotalBillAmount(Scanner sc) {
         System.out.println("----------- CALCULATE TOTAL BILL -----------");
         // Bước 1: Nhập và xác thực ID hóa đơn
         System.out.print("Enter Transaction ID> ");
         String id = sc.nextLine();
 
-        Transaction transTmp = SearchTransactionByID(id);
+        Transaction transTmp = SearchTransactionByIDV1(id);
         if (transTmp == null) {
             System.out.println("** Transaction NOT found.");
             return;
@@ -169,22 +174,31 @@ public class SalesManagement {
         System.out.println("----------- Bill Details -----------");
         System.out.printf("Transaction ID : %s\n", transTmp.getIdTransaction());
         System.out.printf("Customer ID    : %s\n", transTmp.getIdCustomer());
-        System.out.printf("Created Date   : %s\n", transTmp.getCreatedDate());
+        System.out.printf("Created Date   : %s\n\n", transTmp.getCreatedDate());
 
         // Bước 3: Liệt kê các sản phẩm và tổng tiền
         transTmp.PrintLineItems();
+
+        System.out.printf("Export the transaction?[YES: true/ NO: false]: ");
+        boolean export = sc.nextBoolean();
+        if (export) {
+            String exportDate = LocalDateTime.now().format(currentDate);
+            transTmp.setExportDate(exportDate);
+            transTmp.setStatus(TransactionStatus.CLOSED);
+            System.out.printf("Exported: %s", transTmp.getExportedDate());
+        } 
     }
 
     // =====================================================================================================
 
-    public void DeleteTransaction() {
+    public void DeleteTransaction(Scanner sc) {
         boolean cont;
         do {
             System.out.println("----------- Delete Transaction -----------");
             System.out.print("Enter Transaction ID> ");
             String id = sc.nextLine();
 
-            Transaction transTmp = SearchTransactionByID(id);
+            Transaction transTmp = SearchTransactionByIDV1(id);
             if (transTmp == null) {
                 System.out.println("** Transaction NOT found.");
             } else if (transTmp.isDeleted()) {
@@ -211,7 +225,7 @@ public class SalesManagement {
 
     // =====================================================================================================
 
-    public void ViewTransactionHistory() {
+    public void ViewTransactionHistory(Scanner sc) {
         System.out.println("----------- Transaction History -----------");
 
         if (saleManagement.isEmpty()) {
@@ -239,18 +253,37 @@ public class SalesManagement {
         // Tính vị trí bắt đầu từ cuối mảng
         int startIndex = saleManagement.size() - limit;
 
-        System.out.printf("%-10s %-10s %-15s %-15s %-10s", "ID Transaction", "ID Customer", "Created Date", "Status");
+        System.out.println("------------------------------------------------------------");
+        System.out.printf("%15s|%15s|%25s|%15s|%15s\n", "ID Transaction", "ID Customer", "Created Date", "Status", "Record");
+        System.out.println("------------------------------------------------------------");
 
         for (int i = startIndex; i < saleManagement.size(); i++) {
             Transaction t = saleManagement.get(i);
-            System.out.printf("| %-10s | %-10s | %-19s | %-8s |\n",
+            System.out.printf("%15s|%15s|%25s|%15s|%15s\n",
                     t.getIdTransaction(),
                     t.getIdCustomer(),
                     t.getCreatedDate(),
-                    t.isDeleted() ? "Delete" : "Exist");
+                    t.getStatus(),
+                    t.isDeleted() ? "Deleted" : "Existing");
         }   
     }
 
+    // =====================================================================================================
+    public void SearchTransactionInDetailed(Scanner sc) {
+        System.out.println("----------- Search Transaction -----------");
+        System.out.print("Enter ID Transaction> ");
+        String id = sc.nextLine();
+
+        if (Validators.isValidIdCustomer(id) && SearchTransactionByIDV2(id)) {
+            Transaction temp = SearchTransactionByIDV1(id);
+            System.out.printf("ID Transaction: %15s\n", temp.getIdTransaction());
+            System.out.printf("ID Customer:    %15s\n", temp.getIdCustomer());
+            System.out.printf("Status:         %15s\n", temp.getStatus());
+            System.out.printf("Record:         %15s\n", temp.isDeleted());
+            System.out.printf("Created Date:   %25s\n", temp.getCreatedDate());
+            System.out.printf("Exported Date:  %25s\n", temp.getExportedDate());
+        } 
+    }
     // =====================================================================================================
     
     private String generateIDtoTransaction() {
@@ -262,10 +295,19 @@ public class SalesManagement {
         this.refProductManagement = productManagement;
     }
 
-    public Transaction SearchTransactionByID(String id) {
+    // Tìm hóa đơn, trả về đối tượng 
+    public Transaction SearchTransactionByIDV1(String id) {
         for (Transaction position : saleManagement) {
-            if (position.getIdTransaction().equals(id)) return position;
+            if (position.getIdTransaction().equalsIgnoreCase(id)) return position;
         }
         return null;
+    }
+
+    // Tìm hóa đơn, trả về 
+    public boolean SearchTransactionByIDV2(String id) {
+        for (Transaction t : saleManagement) {
+            if (t.getIdCustomer().equalsIgnoreCase(id)) return true;
+        }
+        return false;
     }
 }

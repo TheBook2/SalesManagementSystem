@@ -24,31 +24,35 @@ public class Main_Son {
             System.out.println("3. Calculate Total Bill");
             System.out.println("4. Delete Transaction");
             System.out.println("5. View Transaction History");
+            System.out.println("6. Search Transaction in Detailed");
             System.out.println("0. Exit");
-            System.out.println("enter your choice>");
+            System.out.println("Enter your choice>");
             choice = sc.nextInt();
             sc.nextLine();
 
             switch (choice) {
                 case 1: {
-                    test.CreateNewTransaction();
+                    test.CreateNewTransaction(sc);
                     break;
                 }
                 case 2: {
-                    test.AddItemToTransaction();
+                    test.AddItemToTransaction(sc);
                     break;
                 }
                 case 3: {
-                    test.CalculateTotalBillAmount();
+                    test.CalculateTotalBillAmount(sc);
                     break;
                 }
                 case 4: {
-                    test.DeleteTransaction();
+                    test.DeleteTransaction(sc);
                     break;
                 }
                 case 5: {
-                    test.ViewTransactionHistory();
+                    test.ViewTransactionHistory(sc);
                     break;
+                }
+                case 6: {
+                    test.SearchTransactionInDetailed(sc);
                 }
                 case 0: {
                     System.out.println("Exiting....");                    
@@ -56,6 +60,7 @@ public class Main_Son {
                 default: System.out.println("In sai roi kia");
             }
         } while (choice != 0);
+        pManagement.ViewAllProduct();
         sc.close();
     }
 }

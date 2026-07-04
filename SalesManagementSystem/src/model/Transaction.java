@@ -7,9 +7,10 @@ public class Transaction implements IDelete {
     private ArrayList<TransactionItem> lineItems = new ArrayList<TransactionItem>();
     private String idCustomer; 
     private String createdDate;
-    private String exportDate;
+    private String exportedDate;
     private String idTransaction;
-    private boolean isDelete;
+    private TransactionStatus status;
+    private boolean isDeleted;
 
     public void AddItem(TransactionItem newItem) {
         for (TransactionItem existing : lineItems) {
@@ -36,28 +37,36 @@ public class Transaction implements IDelete {
             System.out.println("** No items in this transaction.");
             return;
         }
-        System.out.printf("%-10s %-25s %-20s %-10s\n", "ID", "Name Product", "Price", "Quantity");
+
+        System.out.println("=====================================================================");
+        System.out.printf("%10s|%25s|%15s|%15s|\n", "ID", "Name Product", "Quantity", "Price");
         for (TransactionItem item : lineItems) {
             System.out.println(item.toString());
         }
-        System.out.printf("Total: %56s", GetTotalAmount());
+        System.out.println("=====================================================================");
+        System.out.printf("TOTAL: %s58|\n", GetTotalAmount());
     }
+
+    public enum TransactionStatus {
+        ACTIVE, PENDING, CLOSED, DELETED;
+    }
+
 
     @Override
     public void softDelete() {
-        this.isDelete = true;
+        this.isDeleted = true;
         System.out.println("** Transaction " + idTransaction + " has been deleted.");
     }
 
     @Override
     public void restore() {
-        this.isDelete = false;
+        this.isDeleted = false;
         System.out.println("** Transaction " + idTransaction + " has been restored.");
     }
 
     @Override
     public boolean isDeleted() {
-        return isDelete;
+        return isDeleted;
     }
 
     // =====================================================================================================
@@ -66,23 +75,25 @@ public class Transaction implements IDelete {
         this.idCustomer = "";
         this.idTransaction = "";
         this.createdDate = "";
-        this.exportDate = "";
-        this.isDelete = false;
+        this.exportedDate = "";
+        this.isDeleted = false;
     }
-    public Transaction(String idCustomer, String createdDate, String exportDate, String idTransaction,
-            boolean isDelete) {
+    public Transaction(String idCustomer, String createdDate, String exportedDate, String idTransaction,
+            TransactionStatus status, boolean isDeleted) {
         this.idCustomer = idCustomer;
         this.createdDate = createdDate;
-        this.exportDate = exportDate;
+        this.exportedDate = exportedDate;
         this.idTransaction = idTransaction;
-        this.isDelete = isDelete;
+        this.status = status;
+        this.isDeleted = isDeleted;
     }
 
-    public Transaction(String idCustomer, String createdDate, String idTransaction, boolean isDelete) {
+    public Transaction(String idCustomer, String createdDate, String idTransaction, boolean isDeleted) {
         this.idCustomer = idCustomer;
         this.createdDate = createdDate;
         this.idTransaction = idTransaction;
-        this.isDelete = isDelete;
+        this.status = TransactionStatus.ACTIVE;
+        this.isDeleted = isDeleted;
     }
     // =====================================================================================================
     // Getter & setter
@@ -98,11 +109,11 @@ public class Transaction implements IDelete {
     public void setCreatedDate(String createdDate) {
         this.createdDate = createdDate;
     }
-    public String getExportDate() {
-        return exportDate;
+    public String getExportedDate() {
+        return exportedDate;
     }
-    public void setExportDate(String exportDate) {
-        this.exportDate = exportDate;
+    public void setExportDate(String exportedDate) {
+        this.exportedDate = exportedDate;
     }
     public String getIdTransaction() {
         return idTransaction;
@@ -110,12 +121,15 @@ public class Transaction implements IDelete {
     public void setIdTransaction(String idTransaction) {
         this.idTransaction = idTransaction;
     }
-    public boolean isDelete() {
-        return isDelete;
+
+    public TransactionStatus getStatus() {
+        return status;
     }
-    public void setDelete(boolean isDelete) {
-        this.isDelete = isDelete;
+
+    public void setStatus(TransactionStatus status) {
+        this.status = status;
     }
+    
     
     // =====================================================================================================
 }

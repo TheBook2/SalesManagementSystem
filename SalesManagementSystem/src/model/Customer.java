@@ -1,4 +1,4 @@
-package model.customer;
+package model;
 
 /*
 Các quy tắc đặt tên: 
@@ -12,40 +12,44 @@ Method:
 + getDiscountRate(): double
 */
 
-public class Customer {
-    private int idCustomer; 
+public class Customer   {
+    private String idCustomer; 
     private String nameCustomer;
     private String phoneCustomer;
     private String addressCustomer;
-    private String customerType = "Regular";
+    private String customerType;
+    private boolean isActive;
     
     // Constructor
     public Customer() {
+        this.idCustomer = "";
+        this.nameCustomer = "";
+        this.phoneCustomer = "";
+        this.addressCustomer = "";
+        this.customerType = "Regular";
+        this.isActive = true;
     }
 
     // Constructor with parameters
-    public Customer(int idCustomer, String nameCustomer, String phoneCustomer, String addressCustomer) {
-        this.idCustomer = idCustomer;           
+    public Customer(String idCustomer, String nameCustomer, String phoneCustomer, String addressCustomer, String customerType) {
+        this.idCustomer = idCustomer;
         this.nameCustomer = nameCustomer;
         this.phoneCustomer = phoneCustomer;
         this.addressCustomer = addressCustomer;
+        this.customerType = customerType;
     }
 
-    public Customer(String nameCustomer, String phoneCustomer, String addressCustomer) {
-        this.nameCustomer = nameCustomer;
-        this.phoneCustomer = phoneCustomer;
-        this.addressCustomer = addressCustomer;
-    }
+    
 
     // =====================================================================================================
     // Vung setter & getter cua cac fields
 
     // ID
-    public int getIdCustomer() {
+    public String getIdCustomer() {
         return idCustomer;
     }
 
-    public void setIdCustomer(int idCustomer) {
+    public void setIdCustomer(String idCustomer) {
         this.idCustomer = idCustomer;
     }
 
@@ -83,5 +87,13 @@ public class Customer {
 
     public void setCustomerType(String customerType) {
         this.customerType = customerType;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean isActive) {
+        this.isActive = isActive;
     }
 }

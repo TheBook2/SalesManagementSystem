@@ -68,7 +68,7 @@ public class CustomerManagement {
 
     // =====================================================================================================
 
-    public void UpdateCustomerInfor() {
+    public void updateCustomerInfor() {
         int updateChoice = -1;
         String phoneTemp;
 
@@ -155,7 +155,7 @@ public class CustomerManagement {
 
     // =====================================================================================================
 
-    public void RemoveCustomer() {
+    public void removeCustomer() {
         int verify;
 
         System.out.println("----------- REMOVE CUSTOMER -----------");
@@ -183,7 +183,7 @@ public class CustomerManagement {
     }
     // =====================================================================================================
 
-    public void ViewAllCustomer() {
+    public void viewAllCustomer() {
         System.out.println("----------- CUSTOMER LIST -----------");
         if (customerArr.isEmpty()) {
             System.out.println("** Customer list is empty");

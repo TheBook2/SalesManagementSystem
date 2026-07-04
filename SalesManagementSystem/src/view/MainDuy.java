@@ -34,29 +34,29 @@ public class MainDuy {
 
             switch (choice) {
                 case 1:
-                    pm.AddNewProduct();
+                    pm.addNewProduct();
                     break;
 
                 case 2:
-                    pm.ViewAllProduct();
+                    pm.viewAllProduct();
                     break;
 
                 case 3:
                     // Truyền tạm tham số id là 0 vì bên trong hàm của bạn sẽ hỏi lại id sau
-                    pm.UpdateProduct(0);
+                    pm.updateProduct();
                     break;
 
                 case 4:
                     System.out.print("Enter Product ID to remove: ");
                     int idRemove = sc.nextInt();
                     sc.nextLine();
-                    pm.RemoveProduct(idRemove);
+                    pm.removeProduct(idRemove);
                     break;
 
                 case 5:
                     System.out.print("Enter keyword (Name or Category) to search: ");
                     String keyword = sc.nextLine();
-                    pm.SearchProduct(keyword);
+                    pm.searchProduct(keyword);
                     break;
 
                 case 6:
@@ -65,7 +65,7 @@ public class MainDuy {
                     System.out.print("Enter quantity to sell: ");
                     int qtyCheck = sc.nextInt();
                     sc.nextLine();
-                    im.CheckAvailableStock(idCheck, qtyCheck);
+                    im.checkAvailableStock(idCheck, qtyCheck);
                     break;
 
                 case 7:
@@ -76,8 +76,8 @@ public class MainDuy {
                     sc.nextLine();
 
                     // Thường sẽ kiểm tra trước khi trừ kho
-                    if (im.CheckAvailableStock(idSale, qtySale)) {
-                        im.UpdateProductAfterSale(idSale, qtySale);
+                    if (im.checkAvailableStock(idSale, qtySale)) {
+                        im.updateProductAfterSale(idSale, qtySale);
                     }
                     break;
 
